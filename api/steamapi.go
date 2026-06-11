@@ -59,11 +59,15 @@ func GetPublishedFileDetails(ids []uint64) ([]model.WallpaperInfo, error) {
 		if err != nil {
 			continue
 		}
+		var fileSize uint64
+		if d.FileSize != "" {
+			fileSize, _ = strconv.ParseUint(d.FileSize, 10, 64)
+		}
 		results = append(results, model.WallpaperInfo{
 			PublishedFileID: id,
 			Title:           d.Title,
 			OwnerSteamID:    d.Creator,
-			FileSize:        d.FileSize,
+			FileSize:        fileSize,
 			PreviewURL:      d.PreviewURL,
 		})
 	}

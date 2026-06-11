@@ -26,7 +26,7 @@ type GetPublishedFileDetailsResponse struct {
 			ConsumerAppID   uint32 `json:"consumer_appid"`
 			Title           string `json:"title"`
 			FileDescription string `json:"file_description"`
-			FileSize        uint64 `json:"file_size"`
+			FileSize        string `json:"file_size"`
 			PreviewURL      string `json:"preview_url"`
 			TimeCreated     uint32 `json:"time_created"`
 			TimeUpdated     uint32 `json:"time_updated"`
