@@ -28,14 +28,25 @@ func main() {
 	}
 	fmt.Printf("Steam path: %s\n", steamPath)
 
+	// Find the Steam library where Wallpaper Engine is actually installed
+	weLibraryPath, err := steam.FindWELibraryPath(steamPath)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "WARN: %v\n", err)
+		fmt.Println("Falling back to main Steam path for workshop operations.")
+		weLibraryPath = steamPath
+	}
+	if weLibraryPath != steamPath {
+		fmt.Printf("Wallpaper Engine library path: %s\n", weLibraryPath)
+	}
+
 	if *fixDownloads {
-		if err := fixer.RunFixDownloads(steamPath, *force); err != nil {
+		if err := fixer.RunFixDownloads(weLibraryPath, *force); err != nil {
 			fmt.Fprintf(os.Stderr, "ERROR during fix-downloads: %v\n", err)
 			os.Exit(1)
 		}
 	}
 
-	workshopPath := steam.GetWorkshopPath(steamPath)
+	workshopPath := steam.GetWorkshopPath(weLibraryPath)
 
 	// Run cleanup unless this is fix-downloads-only mode. Always run cleanup before deleting trash.
 	if !*fixDownloads || *deleteTrash {
