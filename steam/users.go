@@ -8,10 +8,6 @@ import (
 	"wp-cleaner/model"
 )
 
-const (
-	SteamAppID = 431960 // Wallpaper Engine
-)
-
 func GetUsers(steamPath string) ([]model.SteamUser, error) {
 	path := GetLoginUsersPath(steamPath)
 	data, err := os.ReadFile(path)

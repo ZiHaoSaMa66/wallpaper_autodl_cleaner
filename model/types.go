@@ -1,5 +1,7 @@
 package model
 
+const WallpaperEngineAppID = "431960"
+
 type SteamUser struct {
 	SteamID64   string `json:"steamid64"`
 	AccountName string `json:"account_name"`

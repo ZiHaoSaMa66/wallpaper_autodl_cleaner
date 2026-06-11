@@ -26,6 +26,7 @@ func ScanWorkshop(workshopPath string) ([]uint64, error) {
 	return ids, nil
 }
 
+// GetWorkshopDirSize returns the total size of all files in the workshop directory.
 func GetWorkshopDirSize(workshopPath string) (int64, error) {
 	var total int64
 	err := filepath.WalkDir(workshopPath, func(path string, d os.DirEntry, err error) error {

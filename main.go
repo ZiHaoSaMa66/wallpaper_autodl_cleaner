@@ -37,6 +37,7 @@ func main() {
 
 	workshopPath := steam.GetWorkshopPath(steamPath)
 
+	// Run cleanup unless this is fix-downloads-only mode. Always run cleanup before deleting trash.
 	if !*fixDownloads || *deleteTrash {
 		users, err := steam.GetUsers(steamPath)
 		if err != nil {

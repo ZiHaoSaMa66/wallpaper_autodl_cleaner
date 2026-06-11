@@ -7,6 +7,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
+	"wp-cleaner/model"
 	"wp-cleaner/steam"
 )
 
@@ -20,7 +21,7 @@ func cleanDownloads(steamPath string) error {
 		return fmt.Errorf("cannot read downloads dir: %w", err)
 	}
 	for _, e := range entries {
-		if strings.HasPrefix(e.Name(), "431960") {
+		if strings.HasPrefix(e.Name(), model.WallpaperEngineAppID) {
 			fullPath := filepath.Join(dlPath, e.Name())
 			if err := os.RemoveAll(fullPath); err != nil {
 				return fmt.Errorf("failed to remove %s: %w", e.Name(), err)
@@ -32,7 +33,7 @@ func cleanDownloads(steamPath string) error {
 }
 
 func fixACF(steamPath string) error {
-	acfPath := filepath.Join(steamPath, "steamapps", "workshop", "appworkshop_431960.acf")
+	acfPath := filepath.Join(steamPath, "steamapps", "workshop", "appworkshop_"+model.WallpaperEngineAppID+".acf")
 	input, err := os.ReadFile(acfPath)
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -61,9 +62,8 @@ func fixACF(steamPath string) error {
 	}
 	output := strings.Join(lines, "\n")
 	if err := os.WriteFile(acfPath, []byte(output), 0644); err != nil {
-		if renameErr := os.Rename(bakPath, acfPath); renameErr == nil {
-			os.Remove(acfPath)
-		}
+		os.Remove(acfPath)
+		os.Rename(bakPath, acfPath)
 		return fmt.Errorf("cannot write ACF: %w", err)
 	}
 	fmt.Println("  ACF file updated (removed LastBuildID entries)")

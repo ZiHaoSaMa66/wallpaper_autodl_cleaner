@@ -64,11 +64,15 @@ func TestScanWorkshop_ValidIDs(t *testing.T) {
 	if len(ids) != 2 {
 		t.Fatalf("expected 2 ids, got %d: %v", len(ids), ids)
 	}
-	if ids[0] != 12345 && ids[0] != 67890 {
-		t.Errorf("unexpected id: %d", ids[0])
+	m := make(map[uint64]bool)
+	for _, id := range ids {
+		m[id] = true
 	}
-	if ids[1] != 12345 && ids[1] != 67890 {
-		t.Errorf("unexpected id: %d", ids[1])
+	if !m[12345] {
+		t.Errorf("missing id 12345, got %v", ids)
+	}
+	if !m[67890] {
+		t.Errorf("missing id 67890, got %v", ids)
 	}
 }
 

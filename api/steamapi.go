@@ -76,8 +76,8 @@ func GetPublishedFileDetails(ids []uint64) ([]model.WallpaperInfo, error) {
 
 func GetUserSubscribedFiles(apiKey, steamID string) ([]uint64, error) {
 	inputJSON := fmt.Sprintf(
-		`{"steamid":"%s","appid":431960,"type":"mysubscriptions","numperpage":100}`,
-		steamID,
+		`{"steamid":"%s","appid":%s,"type":"mysubscriptions","numperpage":100}`,
+		steamID, model.WallpaperEngineAppID,
 	)
 	reqURL := fmt.Sprintf(
 		"%s/IPublishedFileService/GetUserFiles/v1/?key=%s&input_json=%s",
@@ -114,8 +114,8 @@ func GetUserSubscribedFiles(apiKey, steamID string) ([]uint64, error) {
 		page := uint64(2)
 		for uint64(len(ids)) < total {
 			inputJSON := fmt.Sprintf(
-				`{"steamid":"%s","appid":431960,"type":"mysubscriptions","numperpage":100,"page":%d}`,
-				steamID, page,
+				`{"steamid":"%s","appid":%s,"type":"mysubscriptions","numperpage":100,"page":%d}`,
+				steamID, model.WallpaperEngineAppID, page,
 			)
 			reqURL := fmt.Sprintf(
 				"%s/IPublishedFileService/GetUserFiles/v1/?key=%s&input_json=%s",
