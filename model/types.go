@@ -41,6 +41,6 @@ type GetUserFilesResponse struct {
 		Total uint64 `json:"total"`
 		Files []struct {
 			PublishedFileID string `json:"publishedfileid"`
-		} `json:"publishedfiledetails"`
+		} `json:"files"`
 	} `json:"response"`
 }

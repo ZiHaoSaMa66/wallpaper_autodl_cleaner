@@ -63,7 +63,9 @@ func fixACF(steamPath string) error {
 	output := strings.Join(lines, "\n")
 	if err := os.WriteFile(acfPath, []byte(output), 0644); err != nil {
 		os.Remove(acfPath)
-		os.Rename(bakPath, acfPath)
+		if rerr := os.Rename(bakPath, acfPath); rerr != nil {
+			return fmt.Errorf("cannot write ACF: %w, backup restore failed: %v", err, rerr)
+		}
 		return fmt.Errorf("cannot write ACF: %w", err)
 	}
 	fmt.Println("  ACF file updated (removed LastBuildID entries)")

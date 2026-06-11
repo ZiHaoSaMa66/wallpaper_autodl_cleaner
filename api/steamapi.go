@@ -126,10 +126,11 @@ func GetUserSubscribedFiles(apiKey, steamID string) ([]uint64, error) {
 				return ids, fmt.Errorf("pagination page %d failed: %w", page, err)
 			}
 			body, err := io.ReadAll(resp.Body)
-			resp.Body.Close()
 			if err != nil {
+				resp.Body.Close()
 				return ids, fmt.Errorf("pagination page %d read failed: %w", page, err)
 			}
+			resp.Body.Close()
 			var pageResp model.GetUserFilesResponse
 			if err := json.Unmarshal(body, &pageResp); err != nil {
 				return ids, fmt.Errorf("pagination page %d parse failed: %w", page, err)
