@@ -1,4 +1,4 @@
-# wp-cleaner
+# wallpaper_autodl_cleaner
 
 > Clean up wallpapers auto-downloaded by other Steam accounts in Wallpaper Engine
 

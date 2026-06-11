@@ -1,4 +1,4 @@
-# wp-cleaner
+# wallpaper_autodl_cleaner
 
 > 清理 Steam Wallpaper Engine 跨账号登录时自动下载的壁纸
 
