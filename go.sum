@@ -1,0 +1,4 @@
+github.com/jslay88/vdf v1.0.0 h1:k1ctcliNMBcNMMzPikhWGNw/w9iFc0Metf+zk06jXII=
+github.com/jslay88/vdf v1.0.0/go.mod h1:7SeZHs12UPs8JYq0wJDLUw8bp0t5rB57muCEY8qL+ZY=
+golang.org/x/sys v0.46.0 h1:noSf2Fq6F8DBgS+LysIkx7rIExoNHJsxOAtPp4rthXw=
+golang.org/x/sys v0.46.0/go.mod h1:4GL1E5IUh+htKOUEOaiffhrAeqysfVGipDYzABqnCmw=
