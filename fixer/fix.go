@@ -78,6 +78,7 @@ func launchFixer(steamPath string) error {
 		return fmt.Errorf("fixer tool not found at %s: please locate steamredownloadfixer32.exe manually and run it", fixerPath)
 	}
 	cmd := exec.Command(fixerPath)
+	cmd.Dir = filepath.Dir(fixerPath)
 	if err := cmd.Start(); err != nil {
 		return fmt.Errorf("failed to launch fixer at %s: %w: please run it manually", fixerPath, err)
 	}
