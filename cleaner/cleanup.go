@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 	"wp-cleaner/model"
 	"wp-cleaner/scanner"
 	"wp-cleaner/steam"
@@ -65,12 +66,7 @@ func (p *CleanupPlan) DryRun() {
 	}
 }
 
-func (p *CleanupPlan) Execute(dryRun bool) error {
-	if dryRun {
-		p.DryRun()
-		return nil
-	}
-
+func (p *CleanupPlan) Execute() error {
 	if len(p.ToRemove) == 0 {
 		fmt.Println("Nothing to clean.")
 		return nil
@@ -92,6 +88,86 @@ func (p *CleanupPlan) Execute(dryRun bool) error {
 	fmt.Println("To restore, rename folders from .trash-* back to original IDs.")
 	if errs > 0 {
 		return fmt.Errorf("%d items failed to quarantine", errs)
+	}
+	return nil
+}
+
+func ScanTrash(workshopPath string) (paths []string, totalSize int64, err error) {
+	entries, err := os.ReadDir(workshopPath)
+	if err != nil {
+		return nil, 0, fmt.Errorf("cannot read workshop dir: %w", err)
+	}
+	for _, e := range entries {
+		if !e.IsDir() {
+			continue
+		}
+		if !strings.HasPrefix(e.Name(), ".trash-") {
+			continue
+		}
+		fullPath := filepath.Join(workshopPath, e.Name())
+		var size int64
+		err = filepath.WalkDir(fullPath, func(path string, d os.DirEntry, err error) error {
+			if err != nil {
+				return err
+			}
+			if !d.IsDir() {
+				info, err := d.Info()
+				if err == nil {
+					size += info.Size()
+				}
+			}
+			return nil
+		})
+		if err != nil {
+			return nil, 0, fmt.Errorf("cannot calculate size for %s: %w", e.Name(), err)
+		}
+		paths = append(paths, fullPath)
+		totalSize += size
+	}
+	return paths, totalSize, nil
+}
+
+func DeleteTrash(workshopPath string, dryRun bool, force bool) error {
+	paths, totalSize, err := ScanTrash(workshopPath)
+	if err != nil {
+		return err
+	}
+	if len(paths) == 0 {
+		fmt.Println("No trash folders found.")
+		return nil
+	}
+
+	fmt.Printf("Found %d trash folder(s), total size: %s\n", len(paths), scanner.HumanSize(totalSize))
+	for _, p := range paths {
+		fmt.Printf("  %s\n", p)
+	}
+
+	if dryRun {
+		fmt.Println("Dry-run mode: nothing was deleted.")
+		return nil
+	}
+
+	if !force {
+		fmt.Print("Permanently delete these folders? (y/N): ")
+		var response string
+		fmt.Scanln(&response)
+		if response != "y" && response != "Y" {
+			fmt.Println("Cancelled.")
+			return nil
+		}
+	}
+
+	var errs int
+	for _, p := range paths {
+		if err := os.RemoveAll(p); err != nil {
+			fmt.Fprintf(os.Stderr, "WARN: failed to delete %s: %v\n", p, err)
+			errs++
+		} else {
+			fmt.Printf("  Deleted: %s\n", p)
+		}
+	}
+	if errs > 0 {
+		return fmt.Errorf("%d items failed to delete", errs)
 	}
 	return nil
 }

@@ -56,6 +56,4 @@ func HumanSize(b int64) string {
 	return fmt.Sprintf("%.1f %cB", float64(b)/float64(div), "KMGTPE"[exp])
 }
 
-func ParseIDsFromSubdirs(workshopPath string) ([]uint64, error) {
-	return ScanWorkshop(workshopPath)
-}
+

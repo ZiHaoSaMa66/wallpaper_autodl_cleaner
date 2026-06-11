@@ -30,6 +30,27 @@ wp-cleaner.exe -api-key=你的KEY -dry-run=false
 
 将所有非当前用户订阅的壁纸移至隐藏备份文件夹（`.trash-*`）。
 
+### 4. 修复下载问题（可选）
+```cmd
+wp-cleaner.exe -fix-downloads
+```
+
+清除 Steam 下载缓存、修复 ACF 文件、启动 Steam 重新下载修复工具。如有下载问题，请在清理前运行。
+
+### 5. 永久删除隔离的壁纸
+```cmd
+wp-cleaner.exe -api-key=你的KEY -delete
+```
+
+清理后，隔离的 `.trash-*` 文件夹会保留供审查。添加 `-delete` 可在清理结束时永久删除它们。
+
+### 6. 完整工作流
+```cmd
+wp-cleaner.exe -api-key=你的KEY -fix-downloads -delete -dry-run=false
+```
+
+修复下载 → 清理未订阅壁纸 → 永久删除隔离文件夹。
+
 ### 参数说明
 
 | 参数 | 默认值 | 说明 |
@@ -38,6 +59,8 @@ wp-cleaner.exe -api-key=你的KEY -dry-run=false
 | `-steam-id` | `""` | SteamID64（留空自动从 loginusers.vdf 检测） |
 | `-dry-run` | `true` | 预览模式，不实际执行清理 |
 | `-force` | `false` | 跳过确认提示 |
+| `-fix-downloads` | `false` | 预清理：清除下载缓存、修复 ACF 文件、运行 Steam 修复工具 |
+| `-delete` | `false` | 永久删除隔离的 .trash-* 文件夹（会先执行正常清理流程） |
 
 ## 工作原理
 

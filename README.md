@@ -29,6 +29,27 @@ wp-cleaner.exe -api-key=YOUR_STEAM_API_KEY
 
 Removes (moves to hidden backup) all wallpapers not subscribed by the current user.
 
+### 4. Fix download issues (optional)
+```cmd
+wp-cleaner.exe -fix-downloads
+```
+
+Clears Steam download cache, fixes ACF files, and launches the Steam re-download fixer tool. Run this before cleanup if you have download issues.
+
+### 5. Permanently delete quarantined trash
+```cmd
+wp-cleaner.exe -api-key=YOUR_STEAM_API_KEY -delete
+```
+
+After cleanup, quarantined `.trash-*` folders remain for review. Add `-delete` to permanently remove them at the end of cleanup.
+
+### 6. Full workflow
+```cmd
+wp-cleaner.exe -api-key=YOUR_STEAM_API_KEY -fix-downloads -delete -dry-run=false
+```
+
+Fix downloads → clean up unsubscribed wallpapers → permanently delete trash.
+
 ### Flags
 
 | Flag | Default | Description |
@@ -37,6 +58,8 @@ Removes (moves to hidden backup) all wallpapers not subscribed by the current us
 | `-steam-id` | `""` | SteamID64 (auto-detected from loginusers.vdf if empty) |
 | `-dry-run` | `true` | Preview only, no actual deletion |
 | `-force` | `false` | Skip confirmation prompt |
+| `-fix-downloads` | `false` | Pre-cleanup: clear download cache, fix ACF files, run Steam repair tool |
+| `-delete` | `false` | Permanently delete quarantined .trash-* folders (runs normal cleanup first) |
 
 ## How it works
 
