@@ -1,7 +1,8 @@
 # wp-cleaner
 
-> 清理 Steam Wallpaper Engine 跨账号登录时自动下载的壁纸
 > Clean up wallpapers auto-downloaded by other Steam accounts in Wallpaper Engine
+
+English [中文](README_ZH.md)
 
 ## Usage
 
